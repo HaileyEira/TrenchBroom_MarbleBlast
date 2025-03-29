@@ -1,0 +1,219 @@
+// Marble Blast .fgd file by Hailey, xaGe, and MattP
+// For use with TrenchBroom 2025.2 and later
+// https://marbleblastultra.com
+// https://twitter.com/OpenMBU
+// This file was last updated on 29 March 2025 by Hailey
+ 
+// WorldSpawn
+
+@SolidClass = worldspawn : "World Entity"
+[
+   ambient_color(color255) : "Ambient color" : "0 0 0"
+   detail_number(integer) : "Shape's detail index" : 0
+   emergency_ambient_color(color255) : "Emergency ambient color" : "0 0 0"
+   geometry_scale(integer) : "Geometry scale" : 32
+   light_geometry_scale(integer) : "Lighting scale (must be a power of 2)" : 32
+   min_pixels(integer) : "Minimum pixels for detail" : 250
+]
+
+@SolidClass = sgLightingScaleEntity : "Synapse Gaming Lighting Scale Entity"
+[
+   light_geometry_scale(string) : "Lighting scale (must be a power of 2)" : "32.0"
+   self_illumination_color(color255) : "Self-Illumination Color" : "0 0 0"
+]
+
+// Baseclasses to be used by PointClasses
+
+@baseclass = Targetname [ name(target_source) : "Name" ]
+@baseclass = Target [ target(target_destination) : "Target" ]
+@baseclass = LightAnimFlags [ spawnflags(Flags) = 
+   [  1 : "Auto start" 	      : 1
+		2 : "Loop to end frame" : 1
+      4 : "Random frame"      : 0 ]]
+@baseclass = LightAnimSpeed
+[
+   speed(choices) : "Speed" : 2 =
+   [
+      0: "Very slow"
+      1: "Slow"
+      2: "Normal"
+      3: "Fast"
+      4: "Very fast"
+   ]
+]
+
+// Baseclasses for MBU
+
+@baseclass = Angles [ angles(string) : "X Y Z angles of item, example 0 0 180 makes it upside down" : "0 0 0"]
+@baseclass base(Angles) = Item
+[
+   static(choices) : "Yes 1 or No 0 (default 1)" : 1 = [ 0: "No" 1: "Yes" ]
+   rotate(choices) : "Yes 1 or No 0 (default 1)" : 1 = [ 0: "No" 1: "Yes" ]
+   game_class(string) : "Game Class" : "Item"
+]
+   
+@baseclass base(Angles) = StaticShape
+[
+  game_class(string) : "Game Class" : "StaticShape"
+]
+
+@baseclass base(Angles) = InteriorInstance
+[
+  game_class(string) : "Game Class" : "InteriorInstance"
+  interiorFile(string) : "Interior File" : ""
+]
+
+@baseclass base(Angles) = SpawnSphere
+[
+  game_class(string) : "Game Class" : "SpawnSphere"
+]
+
+@baseclass base(Item) size(-8 -8 0, 8 8 16) = GemSpawnSphere
+[
+  game_class(string) : "Game Class" : "SpawnSphere"
+]
+
+// Triggers
+
+@SolidClass = trigger : "Trigger Entity"
+[
+	name(string) : "Trigger Name" : ""
+]
+
+// Doors, elevators, etc...
+
+@SolidClass = Door_Elevator : "Door or Elevator"
+[
+	name(string) : "Name" : "MustChange"
+	path_name(string) : "Path subscription" : ""
+	trigger0_name(string) : "Trigger 0" : ""
+	trigger1_name(string) : "Trigger 1" : ""
+	trigger2_name(string) : "Trigger 2" : ""
+	trigger3_name(string) : "Trigger 3" : ""
+	trigger4_name(string) : "Trigger 4" : ""
+	trigger5_name(string) : "Trigger 5" : ""
+	trigger6_name(string) : "Trigger 6" : ""
+	trigger7_name(string) : "Trigger 7" : ""
+]
+
+// Pathing
+
+@PointClass = path_node : "Path Node"
+[
+   name(target_source) : "Name"
+   next_node(target_destination) : "Next Node"
+   next_time(integer) : "MS to next node" : 1000
+]
+
+// Marble Blast Entities
+
+@PointClass base(GemSpawnSphere) model({{
+gemDataBlock == "GemItem" -> 	{"path":"models/items/gem.fbx","scale":32},
+gemDataBlock == "GemItem_2pts" -> 	{"path":"models/items/gemitem_2pts.fbx","scale":32},
+gemDataBlock == "GemItem_5pts" -> 	{"path":"models/items/gemitem_5pts.fbx","scale":32},
+                              {"path":"models/items/gem.fbx","scale":32}
+                                     
+      }}) = GemSpawnSphereMarker :
+   "Assign a gem color by entering its value in the gemDataBlock field above.
+
+0 is for Red (1 point)
+1 is for Yellow (2 points)
+2 is for Blue (5 points)
+   
+If you're creating a singleplayer level, place gems on the map using the GemItem entity from the Entity Browser. If you're creating a multiplayer level, use the GemSpawnSphereMarker entity.
+
+If you need help, you can ask in our Discord server. The Discord invite can be found at https://marbleblastultra.com."
+      [
+         gemDataBlock(choices) : "Gem Selection" : 0 =
+      [
+         "GemItem" : "Red Gem, 1 Point"
+         "GemItem_2pts" : "Yellow Gem, 2 Points"
+         "GemItem_5pts" : "Blue Gem, 5 Points"
+      ]
+      game_class(string) : "SpawnSphere" : "SpawnSphere"
+   ]
+   
+@PointClass base(InteriorInstance) model({{
+  interiorFile == "~/data/missions/parts/arch_2_corner.dif" -> {"path" : "models/interiors/arch_2_corner.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/arch_2_normal.dif" -> {"path" : "models/interiors/arch_2_normal.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/arch_3_corner.dif" -> {"path" : "models/interiors/arch_3_corner.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/arch_3_normal.dif" -> {"path" : "models/interiors/arch_3_normal.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/arch_4_corner.dif" -> {"path" : "models/interiors/arch_4_corner.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/arch_4_normal.dif" -> {"path" : "models/interiors/arch_4_normal.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/arch_8_corner.dif" -> {"path" : "models/interiors/arch_8_corner.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/arch_8_normal.dif" -> {"path" : "models/interiors/arch_8_normal.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/intermediate_gentleslope.dif" -> {"path" : "models/interiors/intermediate_gentleslope.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/intermediate_tight_curve.dif" -> {"path" : "models/interiors/intermediate_tight_curve.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/intermediate_wide_curve.dif" -> {"path" : "models/interiors/intermediate_wide_curve.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/royale_climb.dif" -> {"path" : "models/interiors/royale_climb.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/royale_corner1.dif" -> {"path" : "models/interiors/royale_corner1.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/royale_corner2.dif" -> {"path" : "models/interiors/royale_corner2.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/royale_pipe.dif" -> {"path" : "models/interiors/royale_pipe.fbx","scale":32},
+  interiorFile == "~/data/missions/parts/vertical_support.dif" -> {"path" : "models/interiors/vertical_support.fbx","scale":32}
+}}) = interior : "Interior object"
+[
+   interiorFile(choices) : "Interior selection" : 0 =
+    [
+       "~/data/missions/parts/arch_2_corner.dif" : "arch_2_corner.dif"
+       "~/data/missions/parts/arch_2_normal.dif" : "arch_2_normal.dif"
+       "~/data/missions/parts/arch_3_corner.dif" : "arch_3_corner.dif"
+       "~/data/missions/parts/arch_3_normal.dif" : "arch_3_normal.dif"
+       "~/data/missions/parts/arch_4_corner.dif" : "arch_4_corner.dif"
+       "~/data/missions/parts/arch_4_normal.dif" : "arch_4_normal.dif"
+       "~/data/missions/parts/arch_8_corner.dif" : "arch_8_corner.dif"
+       "~/data/missions/parts/arch_8_normal.dif" : "arch_8_normal.dif"
+       "~/data/missions/parts/intermediate_gentleslope.dif" : "intermediate_gentleslope.dif"
+       "~/data/missions/parts/intermediate_tight_curve.dif" : "intermediate_tight_curve.dif"
+       "~/data/missions/parts/intermediate_wide_curve.dif" : "intermediate_wide_curve.dif"
+       "~/data/missions/parts/royale_climb.dif" : "royale_climb.dif"
+       "~/data/missions/parts/royale_corner1.dif" : "royale_corner1.dif"
+       "~/data/missions/parts/royale_corner2.dif" : "royale_corner2.dif"
+       "~/data/missions/parts/royale_pipe.dif" : "royale_pipe.dif"
+       "~/data/missions/parts/vertical_support.dif" : "vertical_support.dif"
+    ]
+]
+
+@PointClass base(Item) model({"path":"models/items/gem.fbx","scale":32}) size(-8 -8 0, 8 8 16) = GemItem : "single player gem" [] 	
+@PointClass base(Item) model({"path":"models/items/superjump.fbx","scale":32}) size(-8 -8 0, 8 8 16) = SuperJumpItem : "" []
+@PointClass base(Item) model({"path":"models/items/superspeed.fbx","scale":32}) size(-8 -8 0, 8 8 16) = SuperSpeedItem : "" []
+@PointClass base(Item) model({"path":"models/images/helicopter.fbx","scale":32}) size(-8 -8 0, 8 8 16) = HelicopterItem : "" []
+@PointClass base(Item) model({"path":"models/items/antigravity.fbx","scale":32}) size(-8 -8 0, 8 8 16) = AntiGravityItem : "" []
+@PointClass base(Item) model({"path":"models/images/blast.fbx","scale":32}) size(-8 -8 0, 8 8 16) = BlastItem : "" []
+@PointClass base(Item) model({"path":"models/images/grow.fbx","scale":32}) size(-8 -8 0, 8 8 16) = MegaMarbleItem : "" []
+@PointClass base(Item) model({"path":"models/items/egg.fbx","scale":32}) size(-8 -8 4, 8 8 16) = EasterEggItem : "" []
+@PointClass base(Item) model({"path":"models/items/timetravel.fbx","scale":32}) size(-8 -8 0, 8 8 16) = TimeTravelItem : "" []
+@PointClass base(StaticShape) model({"path":"models/bumpers/pball_round.fbx","scale":32}) size(-8 -8 0, 8 8 16) = RoundBumper : "" []
+@PointClass base(StaticShape) model({"path":"models/hazards/ductfan.fbx","scale":32}) size(-24 -24 4, 24 24 24) = DuctFan : "" []
+@PointClass base(StaticShape) model({"path":"models/hazards/trapdoor.fbx","scale":32}) size(-32 -32 -48, 32 32 0) = TrapDoor : "" []
+@PointClass base(StaticShape) model({"path":"models/pads/startarea.fbx","scale":32}) size(-48 -48 0, 48 48 8) = StartPad : "" []
+@PointClass base(StaticShape) model({"path":"models/pads/endarea.fbx","scale":32}) size(-48 -48 0, 48 48 8) = EndPad : "" []
+@SolidClass = InBoundsTrigger : "Leave this area and your are OUT!" [
+  classname(string) : "" : "trigger"
+  dataBlock(string) : "" : "InBoundsTrigger"
+]
+
+@PointClass base(StaticShape) model({"path":"models/pads/checkpad.fbx","scale":32}) size(-32 -32 -0.125, 32 32 0.125) = checkPointShape : "CheckPoint." [
+   name(string) : "Checkpoint Group Name" : "check1"
+]
+@SolidClass = CheckPointTrigger : "The bounding hit box brush that triggers a check point. Lay it around your cPS if used." [
+   classname(string) : "" : "trigger"
+   dataBlock(string) : "" : "checkPointTrigger"
+   name(string) : "Checkpoint Group Name" : "check1"
+   sequence(integer) : "" : 0
+]
+
+@PointClass base(StaticShape) model({"path":"models/structures/glass_3.fbx","scale":32}) size(-96 -9 0, 96 9 192) = glass_3shape : "" []
+@PointClass base(StaticShape) model({"path":"models/structures/glass_6.fbx","scale":32}) size(-96 -9 0, 96 9 192) = glass_6shape : "" []
+@PointClass base(StaticShape) model({"path":"models/structures/glass_9.fbx","scale":32}) size(-96 -9 0, 96 9 192) = glass_9shape : "" []
+@PointClass base(StaticShape) model({"path":"models/structures/glass_12.fbx","scale":32}) size(-96 -9 0, 96 9 192) = glass_12shape : "" []
+@PointClass base(StaticShape) model({"path":"models/structures/glass_15.fbx","scale":32}) size(-96 -9 0, 96 9 192) = glass_15shape : "" []
+@PointClass base(StaticShape) model({"path":"models/structures/glass_18.fbx","scale":32}) size(-96 -9 0, 96 9 192) = glass_18shape : "" []
+
+@PointClass base(SpawnSphere) model({"path":"models/markers/spawnsphere.fbx","scale":16}) size(-8 -8 -4, 8 8 12) = SpawnSphereMarker : "" []
+
+@PointClass base(StaticShape)  model({"path":"models/signs/cautionsign.fbx","scale":32}) size(-20 -1 -40, 13 2.5 24) = SignCaution : "Caution!" []
+@PointClass base(StaticShape)  model({"path":"models/signs/cautionsign_caution.fbx","scale":32}) size(-20 -1 -40, 13 2.5 24) = SignCautionCaution : "Caution!" []
+@PointClass base(StaticShape)  model({"path":"models/signs/cautionsign_danger.fbx","scale":32}) size(-20 -1 -40, 13 2.5 24) = SignCautionDanger : "Danger!" []
+@PointClass base(StaticShape)  model({"path":"models/signs/arrowsign_up.fbx","scale":32}) size(-27 -8 0, 8 8 40) = ArrowUp : "" []
+@PointClass base(StaticShape)  model({"path":"models/signs/arrowsign_down.fbx","scale":32}) size(-27 -8 0, 8 8 40) = ArrowDown : "" []
+@PointClass base(StaticShape)  model({"path":"models/signs/arrowsign_side.fbx","scale":32}) size(-27 -8 0, 8 8 40) = ArrowSide : "" []

@@ -1,0 +1,37 @@
+// This material file assigns custom textures to the HAILEY text in the Hailey_Example level
+// This file was last updated on 26/03/2025 by Hailey
+
+{
+    "materials": {
+        "Material_hailey_pink": {
+            "baseTex": ["./hailey_pink"],
+            "mapTo": "hailey_pink",
+            "emissive": [false],
+            "glow": [true]
+        },
+        "Material_hailey_blue": {
+            "baseTex": ["./hailey_blue"],
+            "mapTo": "hailey_blue",
+            "emissive": [false],
+            "glow": [true]
+        },
+        "Material_hailey_purple": {
+            "baseTex": ["./hailey_purple"],
+            "mapTo": "hailey_purple",
+            "emissive": [false],
+            "glow": [true]
+        },
+		"Material_hailey_deep_koamaru": {
+            "baseTex": ["./hailey_deep_koamaru"],
+            "mapTo": "hailey_deep_koamaru",
+            "emissive": [false],
+            "glow": [true]
+        },
+        "Material_hailey_green": {
+            "baseTex": ["./hailey_green"],
+            "mapTo": "hailey_green",
+            "emissive": [false],
+            "glow": [true]
+        }
+    }
+}

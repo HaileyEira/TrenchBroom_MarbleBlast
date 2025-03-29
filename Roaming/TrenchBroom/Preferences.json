@@ -1,0 +1,10 @@
+{
+    "Controls/Camera/Fly move speed": 0.8137061595916748,
+    "Editor/UV lock": true,
+    "Games/Marble Blast/Path": "C:\\Apps\\TrenchBroom\\games\\MarbleBlast\\assets",
+    "Games/Marble Blast/Tool Path/map2dif": "C:\\Apps\\TrenchBroom\\games\\MarbleBlast\\map2dif_plus_mb2.exe",
+    "Map view/Show edges": false,
+    "Menu/View/Camera/Focus on Selection": "Ctrl+Q",
+    "Theme": "Dark",
+    "render/Show axes": false
+}
